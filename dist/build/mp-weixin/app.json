@@ -13,7 +13,7 @@
   ],
   "window": {
     "navigationBarTextStyle": "white",
-    "navigationBarTitleText": "花韵花店",
+    "navigationBarTitleText": "知否花店",
     "navigationBarBackgroundColor": "#FF6B9D",
     "backgroundColor": "#F5F5F5",
     "backgroundTextStyle": "dark"
@@ -28,14 +28,6 @@
       {
         "pagePath": "pages/order/order",
         "text": "点单"
-      },
-      {
-        "pagePath": "pages/cart/cart",
-        "text": "购物车"
-      },
-      {
-        "pagePath": "pages/member/member",
-        "text": "会员"
       },
       {
         "pagePath": "pages/mine/mine",

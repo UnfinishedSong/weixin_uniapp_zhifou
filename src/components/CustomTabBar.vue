@@ -10,12 +10,10 @@
       <view class="tab-icon">
         <text v-if="index === 0" class="icon-text">🏠</text>
         <text v-else-if="index === 1" class="icon-text">🛒</text>
-        <text v-else-if="index === 2" class="icon-text">📦</text>
-        <text v-else-if="index === 3" class="icon-text">👑</text>
         <text v-else class="icon-text">👤</text>
       </view>
       <text class="tab-text">{{ item.text }}</text>
-      <view v-if="index === 2 && cartCount > 0" class="badge">{{ cartCount > 99 ? '99+' : cartCount }}</view>
+      <view v-if="index === 1 && cartCount > 0" class="badge">{{ cartCount > 99 ? '99+' : cartCount }}</view>
     </view>
   </view>
 </template>
@@ -27,8 +25,6 @@ import { useCartStore } from '@/stores/cart'
 const tabList = [
   { pagePath: '/pages/index/index', text: '首页' },
   { pagePath: '/pages/order/order', text: '点单' },
-  { pagePath: '/pages/cart/cart', text: '购物车' },
-  { pagePath: '/pages/member/member', text: '会员' },
   { pagePath: '/pages/mine/mine', text: '我的' }
 ]
 

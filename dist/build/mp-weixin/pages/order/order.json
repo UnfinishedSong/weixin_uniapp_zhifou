@@ -2,5 +2,7 @@
   "navigationBarTitleText": "点单",
   "navigationBarBackgroundColor": "#FF6B9D",
   "navigationBarTextStyle": "white",
-  "usingComponents": {}
+  "usingComponents": {
+    "custom-tab-bar": "../../components/CustomTabBar"
+  }
 }

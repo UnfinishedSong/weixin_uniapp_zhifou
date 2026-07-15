@@ -4,7 +4,7 @@
       <view class="header-content">
         <view class="logo">
           <text class="logo-icon">🌸</text>
-          <text class="logo-text">花韵花店</text>
+          <text class="logo-text">知否花店</text>
         </view>
         <view class="search-box" @click="goSearch">
           <text class="search-icon">🔍</text>

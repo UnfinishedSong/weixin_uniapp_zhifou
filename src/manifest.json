@@ -1,12 +1,12 @@
 {
-  "name": "花韵花店",
-  "appid": "__UNI__HUAYUN",
-  "description": "花韵花店小程序",
+  "name": "知否花店",
+  "appid": "__UNI__ZHIFO",
+  "description": "知否花店小程序",
   "versionName": "1.0.0",
   "versionCode": "100",
   "transformPx": false,
   "h5": {
-    "title": "花韵花店",
+    "title": "知否花店",
     "router": {
       "mode": "hash"
     },

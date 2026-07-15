@@ -2,7 +2,7 @@
 import { onLaunch, onShow, onHide } from '@dcloudio/uni-app'
 
 onLaunch(() => {
-  console.log('花韵花店小程序启动')
+  console.log('知否花店小程序启动')
 })
 
 onShow(() => {

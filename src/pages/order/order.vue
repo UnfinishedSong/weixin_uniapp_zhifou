@@ -78,7 +78,7 @@
     </view>
 
     <view class="bottom-bar">
-      <view class="cart-info" @click="goCart">
+      <view class="cart-info" @click="toggleCartPopup">
         <view class="cart-icon-wrap">
           <text class="cart-icon">🛒</text>
           <view v-if="cartCount > 0" class="cart-badge">{{ cartCount > 99 ? '99+' : cartCount }}</view>
@@ -90,18 +90,97 @@
         <text class="checkout-text">去结算</text>
       </view>
     </view>
+
+    <view v-if="showCartPopup" class="cart-popup-mask" @click="toggleCartPopup"></view>
+    <CustomTabBar />
+    <view class="cart-popup" :class="{ show: showCartPopup }">
+      <view class="cart-popup-header">
+        <text class="cart-popup-title">购物车</text>
+        <view class="cart-popup-close" @click="toggleCartPopup">
+          <text>✕</text>
+        </view>
+      </view>
+      
+      <scroll-view class="cart-popup-content" scroll-y>
+        <view v-if="cartStore.isEmpty" class="empty-cart">
+          <text class="empty-icon">🛒</text>
+          <text class="empty-text">购物车是空的</text>
+        </view>
+        
+        <view v-else class="cart-list">
+          <view 
+            v-for="item in cartStore.items" 
+            :key="item.id"
+            class="cart-item"
+          >
+            <view 
+              class="checkbox" 
+              :class="{ checked: selectedIds.includes(item.id) }"
+              @click="toggleSelect(item.id)"
+            >
+              <text v-if="selectedIds.includes(item.id)">✓</text>
+            </view>
+            <view class="item-image" @click="goDetail(item.product.id)">
+              <image :src="item.product.images[0]" mode="aspectFill" />
+            </view>
+            <view class="item-info">
+              <text class="item-name">{{ item.product.name }}</text>
+              <text v-if="item.spec" class="item-spec">{{ item.spec }}</text>
+              <view class="item-footer">
+                <text class="item-price">{{ item.product.price }}</text>
+                <view class="quantity-control">
+                  <view class="qty-btn" @click="updateCartQty(item, item.quantity - 1)">
+                    <text>-</text>
+                  </view>
+                  <text class="qty-num">{{ item.quantity }}</text>
+                  <view class="qty-btn plus" @click="updateCartQty(item, item.quantity + 1)">
+                    <text>+</text>
+                  </view>
+                </view>
+              </view>
+            </view>
+            <view class="delete-btn" @click="removeItem(item.id)">
+              <text>删除</text>
+            </view>
+          </view>
+        </view>
+      </scroll-view>
+      
+      <view v-if="!cartStore.isEmpty" class="cart-popup-footer">
+        <view class="select-all" @click="toggleSelectAll">
+          <view 
+            class="checkbox" 
+            :class="{ checked: isAllSelected }"
+          >
+            <text v-if="isAllSelected">✓</text>
+          </view>
+          <text>全选</text>
+        </view>
+        <view class="total-info">
+          <text class="total-label">合计:</text>
+          <text class="total-price">{{ selectedTotal }}</text>
+        </view>
+        <view class="checkout-btn" @click="goCheckout">
+          <text>结算({{ selectedCount }})</text>
+        </view>
+      </view>
+    </view>
   </view>
 </template>
 
 <script setup lang="ts">
 import { ref, computed } from 'vue'
+import CustomTabBar from '@/components/CustomTabBar.vue'
 import { categories, products, type Product } from '@/data/products'
 import { useCartStore } from '@/stores/cart'
+import type { CartItem } from '@/stores/cart'
 
 const cartStore = useCartStore()
 
 const searchKeyword = ref('')
 const selectedCategory = ref(0)
+const showCartPopup = ref(false)
+const selectedIds = ref<number[]>([])
 
 const allCategories = computed(() => [
   { id: 0, name: '全部', icon: '🌸' },
@@ -149,6 +228,24 @@ const decreaseQty = (product: Product) => {
 const cartCount = computed(() => cartStore.totalCount)
 const totalPrice = computed(() => cartStore.totalPrice)
 
+const isAllSelected = computed(() => {
+  return cartStore.items.length > 0 && selectedIds.value.length === cartStore.items.length
+})
+
+const selectedCount = computed(() => {
+  return selectedIds.value.reduce((count, id) => {
+    const item = cartStore.items.find(i => i.id === id)
+    return count + (item?.quantity || 0)
+  }, 0)
+})
+
+const selectedTotal = computed(() => {
+  return selectedIds.value.reduce((total, id) => {
+    const item = cartStore.items.find(i => i.id === id)
+    return total + ((item?.product.price || 0) * (item?.quantity || 0))
+  }, 0)
+})
+
 const selectCategory = (categoryId: number) => {
   selectedCategory.value = categoryId
 }
@@ -164,15 +261,61 @@ const goDetail = (productId: number) => {
   uni.navigateTo({ url: `/pages/product/detail?id=${productId}` })
 }
 
-const goCart = () => {
-  uni.switchTab({ url: '/pages/cart/cart' })
+const toggleCartPopup = () => {
+  showCartPopup.value = !showCartPopup.value
+  if (showCartPopup.value) {
+    selectedIds.value = cartStore.items.map(item => item.id)
+  }
+}
+
+const toggleSelect = (id: number) => {
+  const index = selectedIds.value.indexOf(id)
+  if (index === -1) {
+    selectedIds.value.push(id)
+  } else {
+    selectedIds.value.splice(index, 1)
+  }
+}
+
+const toggleSelectAll = () => {
+  if (isAllSelected.value) {
+    selectedIds.value = []
+  } else {
+    selectedIds.value = cartStore.items.map(item => item.id)
+  }
+}
+
+const updateCartQty = (item: CartItem, quantity: number) => {
+  if (quantity <= 0) {
+    removeItem(item.id)
+  } else {
+    cartStore.updateQuantity(item.id, quantity)
+    qtyMap.value[item.product.id] = quantity
+  }
+}
+
+const removeItem = (id: number) => {
+  uni.showModal({
+    title: '确认删除',
+    content: '确定要删除这个商品吗？',
+    success: (res) => {
+      if (res.confirm) {
+        cartStore.removeItem(id)
+        const index = selectedIds.value.indexOf(id)
+        if (index !== -1) {
+          selectedIds.value.splice(index, 1)
+        }
+      }
+    }
+  })
 }
 
 const goCheckout = () => {
-  if (cartStore.isEmpty) {
-    uni.showToast({ title: '购物车为空', icon: 'none' })
+  if (selectedIds.value.length === 0) {
+    uni.showToast({ title: '请选择商品', icon: 'none' })
     return
   }
+  showCartPopup.value = false
   uni.navigateTo({ url: '/pages/checkout/checkout' })
 }
 </script>
@@ -425,7 +568,7 @@ const goCheckout = () => {
 
 .bottom-bar {
   position: fixed;
-  bottom: 0;
+  bottom: 110rpx;
   left: 0;
   right: 0;
   background: #FFFFFF;
@@ -497,5 +640,212 @@ const goCheckout = () => {
 .checkout-text {
   font-size: 28rpx;
   color: #FFFFFF;
+}
+
+.cart-popup-mask {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+}
+
+.cart-popup {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: #FFFFFF;
+  border-radius: 30rpx 30rpx 0 0;
+  z-index: 1001;
+  transform: translateY(100%);
+  transition: transform 0.3s ease;
+  max-height: 80vh;
+  display: flex;
+  flex-direction: column;
+  
+  &.show {
+    transform: translateY(0);
+  }
+}
+
+.cart-popup-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 30rpx;
+  border-bottom: 1rpx solid #F5F5F5;
+}
+
+.cart-popup-title {
+  font-size: 32rpx;
+  font-weight: 600;
+  color: #333333;
+}
+
+.cart-popup-close {
+  width: 56rpx;
+  height: 56rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  
+  text {
+    font-size: 32rpx;
+    color: #999999;
+  }
+}
+
+.cart-popup-content {
+  flex: 1;
+  padding: 20rpx;
+  max-height: 60vh;
+}
+
+.empty-cart {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 60rpx 0;
+}
+
+.cart-list {
+  background: #FFFFFF;
+  border-radius: 16rpx;
+  overflow: hidden;
+}
+
+.cart-item {
+  display: flex;
+  align-items: center;
+  padding: 20rpx;
+  border-bottom: 1rpx solid #F5F5F5;
+  
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+.checkbox {
+  width: 48rpx;
+  height: 48rpx;
+  border: 2rpx solid #DDDDDD;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 20rpx;
+  
+  text {
+    font-size: 28rpx;
+    color: #FFFFFF;
+  }
+  
+  &.checked {
+    background: linear-gradient(135deg, #FF6B9D 0%, #FFB6C8 100%);
+    border-color: transparent;
+  }
+}
+
+.item-image {
+  width: 160rpx;
+  height: 160rpx;
+  border-radius: 12rpx;
+  overflow: hidden;
+  margin-right: 20rpx;
+}
+
+.item-image image {
+  width: 100%;
+  height: 100%;
+}
+
+.item-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.item-name {
+  font-size: 28rpx;
+  font-weight: 500;
+  color: #333333;
+}
+
+.item-spec {
+  font-size: 24rpx;
+  color: #999999;
+  margin-top: 8rpx;
+}
+
+.item-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 16rpx;
+}
+
+.item-price {
+  font-size: 32rpx;
+  font-weight: 600;
+  color: #FF6B9D;
+  
+  &::before {
+    content: '¥';
+    font-size: 24rpx;
+  }
+}
+
+.delete-btn {
+  padding: 12rpx 20rpx;
+  
+  text {
+    font-size: 26rpx;
+    color: #999999;
+  }
+}
+
+.cart-popup-footer {
+  padding: 20rpx;
+  border-top: 1rpx solid #F5F5F5;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: calc(20rpx + env(safe-area-inset-bottom));
+}
+
+.select-all {
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+  
+  text {
+    font-size: 28rpx;
+    color: #333333;
+  }
+}
+
+.total-info {
+  display: flex;
+  align-items: baseline;
+  gap: 8rpx;
+}
+
+.total-label {
+  font-size: 28rpx;
+  color: #666666;
+}
+
+.total-price {
+  font-size: 36rpx;
+  font-weight: 600;
+  color: #FF6B9D;
+  
+  &::before {
+    content: '¥';
+    font-size: 28rpx;
+  }
 }
 </style>
