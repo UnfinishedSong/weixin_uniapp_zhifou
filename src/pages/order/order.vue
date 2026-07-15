@@ -28,6 +28,32 @@
       </scroll-view>
 
       <scroll-view class="product-area" scroll-y>
+        <view v-if="hotProducts.length > 0" class="hot-section">
+          <view class="hot-header">
+            <text class="hot-icon">🔥</text>
+            <text class="hot-title">热销商品</text>
+          </view>
+          <scroll-view class="hot-scroll" scroll-x>
+            <view class="hot-list">
+              <view 
+                v-for="product in hotProducts" 
+                :key="product.id"
+                class="hot-card"
+                @click="goDetail(product.id)"
+              >
+                <image class="hot-image" :src="product.images[0]" mode="aspectFill" />
+                <view class="hot-info">
+                  <text class="hot-name">{{ product.name }}</text>
+                  <text class="hot-price">{{ product.price }}</text>
+                </view>
+                <view class="hot-add" @click.stop="increaseQty(product)">
+                  <text>+</text>
+                </view>
+              </view>
+            </view>
+          </scroll-view>
+        </view>
+
         <view v-if="filteredProducts.length > 0" class="product-list">
           <view 
             v-for="product in filteredProducts" 
@@ -171,7 +197,7 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue'
 import CustomTabBar from '@/components/CustomTabBar.vue'
-import { categories, products, type Product } from '@/data/products'
+import { categories, products, getHotProducts, type Product } from '@/data/products'
 import { useCartStore } from '@/stores/cart'
 import type { CartItem } from '@/stores/cart'
 
@@ -181,6 +207,7 @@ const searchKeyword = ref('')
 const selectedCategory = ref(0)
 const showCartPopup = ref(false)
 const selectedIds = ref<number[]>([])
+const hotProducts = ref<Product[]>(getHotProducts())
 
 const allCategories = computed(() => [
   { id: 0, name: '全部', icon: '🌸' },
@@ -564,6 +591,97 @@ const goCheckout = () => {
   font-size: 28rpx;
   color: #999999;
   margin-top: 20rpx;
+}
+
+.hot-section {
+  margin-bottom: 20rpx;
+}
+
+.hot-header {
+  display: flex;
+  align-items: center;
+  gap: 8rpx;
+  margin-bottom: 16rpx;
+}
+
+.hot-icon {
+  font-size: 32rpx;
+}
+
+.hot-title {
+  font-size: 30rpx;
+  font-weight: 600;
+  color: #333333;
+}
+
+.hot-scroll {
+  white-space: nowrap;
+}
+
+.hot-list {
+  display: inline-flex;
+  gap: 16rpx;
+}
+
+.hot-card {
+  width: 200rpx;
+  background: #FFFFFF;
+  border-radius: 16rpx;
+  overflow: hidden;
+  position: relative;
+  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.04);
+}
+
+.hot-image {
+  width: 200rpx;
+  height: 200rpx;
+}
+
+.hot-info {
+  padding: 12rpx;
+}
+
+.hot-name {
+  font-size: 26rpx;
+  font-weight: 500;
+  color: #333333;
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.hot-price {
+  font-size: 28rpx;
+  font-weight: 600;
+  color: #FF6B9D;
+  margin-top: 8rpx;
+  display: block;
+  
+  &::before {
+    content: '¥';
+    font-size: 22rpx;
+  }
+}
+
+.hot-add {
+  position: absolute;
+  bottom: 12rpx;
+  right: 12rpx;
+  width: 48rpx;
+  height: 48rpx;
+  background: linear-gradient(135deg, #FF6B9D 0%, #FFB6C8 100%);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  
+  text {
+    font-size: 32rpx;
+    color: #FFFFFF;
+    font-weight: 300;
+    line-height: 1;
+  }
 }
 
 .bottom-bar {
