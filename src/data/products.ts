@@ -1,0 +1,233 @@
+export interface Product {
+  id: number
+  name: string
+  price: number
+  originalPrice?: number
+  categoryId: number
+  categoryName: string
+  description: string
+  images: string[]
+  stock: number
+  isHot: boolean
+  isNew: boolean
+  sales: number
+  specs?: string[]
+}
+
+export interface Category {
+  id: number
+  name: string
+  icon: string
+  sortOrder: number
+}
+
+export const categories: Category[] = [
+  { id: 1, name: '玫瑰', icon: '🌹', sortOrder: 1 },
+  { id: 2, name: '百合', icon: '🌸', sortOrder: 2 },
+  { id: 3, name: '康乃馨', icon: '💐', sortOrder: 3 },
+  { id: 4, name: '向日葵', icon: '🌻', sortOrder: 4 },
+  { id: 5, name: '郁金香', icon: '🌷', sortOrder: 5 },
+  { id: 6, name: '满天星', icon: '✨', sortOrder: 6 },
+  { id: 7, name: '勿忘我', icon: '💜', sortOrder: 7 },
+  { id: 8, name: '混搭花束', icon: '🎀', sortOrder: 8 }
+]
+
+export const products: Product[] = [
+  {
+    id: 1,
+    name: '卡布奇诺玫瑰11枝',
+    price: 168,
+    originalPrice: 198,
+    categoryId: 1,
+    categoryName: '玫瑰',
+    description: '精选卡布奇诺玫瑰，温柔优雅，适合表白、纪念日等场合',
+    images: ['https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=beautiful%20cappuccino%20roses%20bouquet%20elegant%20floral%20arrangement&image_size=square'],
+    stock: 100,
+    isHot: true,
+    isNew: false,
+    sales: 520,
+    specs: ['11枝', '19枝', '33枝']
+  },
+  {
+    id: 2,
+    name: '粉佳人玫瑰19枝',
+    price: 198,
+    originalPrice: 238,
+    categoryId: 1,
+    categoryName: '玫瑰',
+    description: '粉嫩娇美的粉佳人玫瑰，传递浪漫爱意',
+    images: ['https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=beautiful%20pink%20roses%20bouquet%20romantic%20floral&image_size=square'],
+    stock: 80,
+    isHot: true,
+    isNew: true,
+    sales: 380,
+    specs: ['11枝', '19枝', '33枝']
+  },
+  {
+    id: 3,
+    name: '白百合9枝',
+    price: 128,
+    originalPrice: 158,
+    categoryId: 2,
+    categoryName: '百合',
+    description: '纯洁高雅的白百合，寓意百年好合',
+    images: ['https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=beautiful%20white%20lilies%20bouquet%20pure%20elegant&image_size=square'],
+    stock: 60,
+    isHot: false,
+    isNew: false,
+    sales: 260,
+    specs: ['9枝', '12枝']
+  },
+  {
+    id: 4,
+    name: '康乃馨20枝',
+    price: 98,
+    originalPrice: 128,
+    categoryId: 3,
+    categoryName: '康乃馨',
+    description: '温馨的康乃馨，送给最爱的母亲',
+    images: ['https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=beautiful%20carnation%20flowers%20bouquet%20warm%20pink&image_size=square'],
+    stock: 120,
+    isHot: true,
+    isNew: false,
+    sales: 450,
+    specs: ['10枝', '20枝', '30枝']
+  },
+  {
+    id: 5,
+    name: '向日葵10枝',
+    price: 138,
+    originalPrice: 168,
+    categoryId: 4,
+    categoryName: '向日葵',
+    description: '阳光灿烂的向日葵，带来满满的正能量',
+    images: ['https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=beautiful%20sunflowers%20bouquet%20bright%20cheerful&image_size=square'],
+    stock: 70,
+    isHot: true,
+    isNew: true,
+    sales: 320,
+    specs: ['5枝', '10枝', '15枝']
+  },
+  {
+    id: 6,
+    name: '郁金香12枝',
+    price: 188,
+    originalPrice: 228,
+    categoryId: 5,
+    categoryName: '郁金香',
+    description: '高贵典雅的郁金香，代表永恒的祝福',
+    images: ['https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=beautiful%20tulips%20bouquet%20elegant%20colorful&image_size=square'],
+    stock: 50,
+    isHot: false,
+    isNew: true,
+    sales: 180,
+    specs: ['9枝', '12枝']
+  },
+  {
+    id: 7,
+    name: '满天星一大束',
+    price: 68,
+    originalPrice: 88,
+    categoryId: 6,
+    categoryName: '满天星',
+    description: '浪漫的满天星，如繁星点点',
+    images: ['https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=beautiful%20baby%27s%20breath%20flowers%20white%20romantic&image_size=square'],
+    stock: 150,
+    isHot: false,
+    isNew: false,
+    sales: 220,
+    specs: ['小束', '大束']
+  },
+  {
+    id: 8,
+    name: '勿忘我花束',
+    price: 78,
+    originalPrice: 98,
+    categoryId: 7,
+    categoryName: '勿忘我',
+    description: '永恒的勿忘我，象征永恒的记忆',
+    images: ['https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=beautiful%20forget%20me%20not%20flowers%20blue%20purple&image_size=square'],
+    stock: 90,
+    isHot: false,
+    isNew: false,
+    sales: 150,
+    specs: ['小束', '大束']
+  },
+  {
+    id: 9,
+    name: '浪漫混搭花束',
+    price: 198,
+    originalPrice: 258,
+    categoryId: 8,
+    categoryName: '混搭花束',
+    description: '精选多种鲜花混搭，色彩丰富，层次分明',
+    images: ['https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=beautiful%20mixed%20flowers%20bouquet%20colorful%20romantic&image_size=square'],
+    stock: 60,
+    isHot: true,
+    isNew: true,
+    sales: 280,
+    specs: ['标准', '豪华']
+  },
+  {
+    id: 10,
+    name: '红玫瑰33枝',
+    price: 328,
+    originalPrice: 388,
+    categoryId: 1,
+    categoryName: '玫瑰',
+    description: '热情奔放的红玫瑰，热恋的象征',
+    images: ['https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=beautiful%20red%20roses%20bouquet%20romantic%20love&image_size=square'],
+    stock: 40,
+    isHot: true,
+    isNew: false,
+    sales: 420,
+    specs: ['19枝', '33枝', '99枝']
+  },
+  {
+    id: 11,
+    name: '香槟玫瑰19枝',
+    price: 218,
+    originalPrice: 268,
+    categoryId: 1,
+    categoryName: '玫瑰',
+    description: '优雅高贵的香槟玫瑰，适合婚礼场合',
+    images: ['https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=beautiful%20champagne%20roses%20bouquet%20elegant%20wedding&image_size=square'],
+    stock: 55,
+    isHot: false,
+    isNew: false,
+    sales: 190,
+    specs: ['11枝', '19枝']
+  },
+  {
+    id: 12,
+    name: '香水百合12枝',
+    price: 158,
+    originalPrice: 198,
+    categoryId: 2,
+    categoryName: '百合',
+    description: '芬芳迷人的香水百合，香气四溢',
+    images: ['https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=beautiful%20fragrant%20lilies%20bouquet%20white%20pink&image_size=square'],
+    stock: 45,
+    isHot: false,
+    isNew: true,
+    sales: 160,
+    specs: ['9枝', '12枝']
+  }
+]
+
+export function getProductsByCategory(categoryId: number): Product[] {
+  if (categoryId === 0) return products
+  return products.filter(p => p.categoryId === categoryId)
+}
+
+export function getHotProducts(): Product[] {
+  return products.filter(p => p.isHot).sort((a, b) => b.sales - a.sales).slice(0, 6)
+}
+
+export function getNewProducts(): Product[] {
+  return products.filter(p => p.isNew).slice(0, 6)
+}
+
+export function getProductById(id: number): Product | undefined {
+  return products.find(p => p.id === id)
+}
