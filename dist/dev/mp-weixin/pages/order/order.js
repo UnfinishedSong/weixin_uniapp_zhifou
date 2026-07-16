@@ -132,7 +132,7 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
       }
     });
     const goCheckout = () => {
-      if (selectedIds.value.length === 0) {
+      if (cartStore.items.length === 0) {
         common_vendor.index.showToast({ title: "请选择商品", icon: "none" });
         return;
       }
@@ -178,22 +178,20 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
             a: product.images[0],
             b: common_vendor.t(product.name),
             c: common_vendor.t(product.description),
-            d: common_vendor.f(((_a = product.specs) == null ? void 0 : _a.slice(0, 3)) || [], (spec, index, i1) => {
+            d: common_vendor.f(((_a = product.specs) == null ? void 0 : _a.slice(0, 2)) || [], (spec, index, i1) => {
               return {
                 a: common_vendor.t(spec),
                 b: index
               };
             }),
             e: common_vendor.t(product.price),
-            f: product.originalPrice
-          }, product.originalPrice ? {
-            g: common_vendor.t(product.originalPrice)
+            f: getQty(product.id) > 0
+          }, getQty(product.id) > 0 ? {
+            g: common_vendor.o(($event) => decreaseQty(product), product.id)
           } : {}, {
-            h: common_vendor.o(($event) => decreaseQty(product), product.id),
-            i: common_vendor.t(getQty(product.id)),
-            j: common_vendor.o(($event) => increaseQty(product), product.id),
-            k: product.id,
-            l: common_vendor.o(($event) => goDetail(product.id), product.id)
+            h: common_vendor.t(getQty(product.id)),
+            i: common_vendor.o(($event) => increaseQty(product), product.id),
+            j: product.id
           });
         })
       } : {}, {

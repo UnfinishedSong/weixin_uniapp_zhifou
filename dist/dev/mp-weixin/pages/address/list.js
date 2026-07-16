@@ -14,7 +14,10 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
     });
     const selectAddress = (id) => {
       selectedId.value = id;
-      common_vendor.index.navigateBack();
+      orderStore.setDefaultAddress(id);
+      setTimeout(() => {
+        common_vendor.index.navigateBack();
+      }, 200);
     };
     const addAddress = () => {
       common_vendor.index.showToast({ title: "添加地址功能开发中", icon: "none" });

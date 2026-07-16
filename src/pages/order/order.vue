@@ -59,39 +59,34 @@
             v-for="product in filteredProducts" 
             :key="product.id"
             class="product-item"
-            @click="goDetail(product.id)"
           >
             <image class="product-image" :src="product.images[0]" mode="aspectFill" />
-            <view class="product-content">
+            <view class="product-info">
               <text class="product-name">{{ product.name }}</text>
               <text class="product-desc">{{ product.description }}</text>
               <view class="product-specs">
                 <text 
-                  v-for="(spec, index) in product.specs?.slice(0, 3) || []" 
+                  v-for="(spec, index) in product.specs?.slice(0, 2) || []" 
                   :key="index"
                   class="spec-tag"
                 >{{ spec }}</text>
               </view>
-              <view class="product-footer">
-                <view class="price-wrap">
-                  <text class="product-price">{{ product.price }}</text>
-                  <text v-if="product.originalPrice" class="original-price">{{ product.originalPrice }}</text>
-                </view>
-                <view class="quantity-control">
-                  <view 
-                    class="qty-btn minus" 
-                    @click.stop="decreaseQty(product)"
-                  >
-                    <text>-</text>
-                  </view>
-                  <text class="qty-num">{{ getQty(product.id) }}</text>
-                  <view 
-                    class="qty-btn plus" 
-                    @click.stop="increaseQty(product)"
-                  >
-                    <text>+</text>
-                  </view>
-                </view>
+              <text class="product-price">{{ product.price }}</text>
+            </view>
+            <view class="qty-control">
+              <view 
+                class="qty-btn minus" 
+                v-if="getQty(product.id) > 0"
+                @click.stop="decreaseQty(product)"
+              >
+                <text>-</text>
+              </view>
+              <text class="qty-num">{{ getQty(product.id) }}</text>
+              <view 
+                class="qty-btn plus" 
+                @click.stop="increaseQty(product)"
+              >
+                <text>+</text>
               </view>
             </view>
           </view>
@@ -350,7 +345,7 @@ onMounted(() => {
 })
 
 const goCheckout = () => {
-  if (selectedIds.value.length === 0) {
+  if (cartStore.items.length === 0) {
     uni.showToast({ title: '请选择商品', icon: 'none' })
     return
   }
@@ -409,7 +404,7 @@ const goCheckout = () => {
 .category-sidebar {
   width: 180rpx;
   background: #F8F8F8;
-  height: calc(100vh - 200rpx);
+  height: calc(100vh - 360rpx);
 }
 
 .category-item {
@@ -455,7 +450,7 @@ const goCheckout = () => {
 .product-area {
   flex: 1;
   padding: 16rpx;
-  height: calc(100vh - 200rpx);
+  height: calc(100vh - 360rpx);
 }
 
 .product-list {
@@ -469,34 +464,45 @@ const goCheckout = () => {
   border-radius: 16rpx;
   padding: 16rpx;
   display: flex;
-  gap: 16rpx;
+  gap: 12rpx;
 }
 
 .product-image {
-  width: 180rpx;
-  height: 180rpx;
+  width: 100rpx;
+  height: 100rpx;
   border-radius: 12rpx;
+  flex-shrink: 0;
 }
 
-.product-content {
+.product-info {
   flex: 1;
   display: flex;
   flex-direction: column;
+  min-width: 0;
+}
+
+.qty-control {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4rpx;
+  flex-shrink: 0;
 }
 
 .product-name {
-  font-size: 28rpx;
+  font-size: 26rpx;
   font-weight: 500;
   color: #333333;
 }
 
 .product-desc {
-  font-size: 24rpx;
+  font-size: 20rpx;
   color: #999999;
-  margin-top: 8rpx;
+  margin-top: 4rpx;
   flex: 1;
   display: -webkit-box;
-  -webkit-line-clamp: 2;
+  -webkit-line-clamp: 1;
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
@@ -504,8 +510,8 @@ const goCheckout = () => {
 .product-specs {
   display: flex;
   flex-wrap: wrap;
-  gap: 8rpx;
-  margin-top: 8rpx;
+  gap: 4rpx;
+  margin-top: 4rpx;
 }
 
 .spec-tag {
@@ -520,13 +526,16 @@ const goCheckout = () => {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-top: 12rpx;
+  margin-top: 8rpx;
+  flex-shrink: 0;
+  width: 100%;
 }
 
 .price-wrap {
   display: flex;
   align-items: baseline;
-  gap: 8rpx;
+  gap: 6rpx;
+  flex-shrink: 0;
 }
 
 .product-price {
@@ -550,19 +559,13 @@ const goCheckout = () => {
   }
 }
 
-.quantity-control {
-  display: flex;
-  align-items: center;
-  background: #F5F5F5;
-  border-radius: 30rpx;
-}
-
 .qty-btn {
-  width: 56rpx;
-  height: 48rpx;
+  width: 60rpx;
+  height: 60rpx;
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-shrink: 0;
   
   text {
     font-size: 32rpx;
@@ -572,10 +575,19 @@ const goCheckout = () => {
   
   &.plus {
     background: linear-gradient(135deg, #FF6B9D 0%, #FFB6C8 100%);
-    border-radius: 30rpx;
+    border-radius: 50%;
     
     text {
       color: #FFFFFF;
+    }
+  }
+  
+  &.minus {
+    border-radius: 50%;
+    background: #F5F5F5;
+    
+    &:active {
+      background: #E8E8E8;
     }
   }
 }

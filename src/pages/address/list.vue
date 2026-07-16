@@ -54,7 +54,10 @@ onMounted(() => {
 
 const selectAddress = (id: number) => {
   selectedId.value = id
-  uni.navigateBack()
+  orderStore.setDefaultAddress(id)
+  setTimeout(() => {
+    uni.navigateBack()
+  }, 200)
 }
 
 const addAddress = () => {

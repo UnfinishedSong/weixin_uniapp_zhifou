@@ -7,7 +7,7 @@ export const useUserStore = defineStore('user', () => {
   const userInfo = ref({
     id: 1,
     openid: 'test_openid',
-    nickname: '花韵用户',
+    nickname: '知否用户',
     avatar: '',
     phone: '138****8888'
   })

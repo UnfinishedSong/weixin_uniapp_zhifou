@@ -39,10 +39,10 @@
 .content-wrapper.data-v-83a5a03c {
   position: relative;
   z-index: 1;
-  padding: 60rpx 30rpx 30rpx;
+  padding: 180rpx 30rpx 30rpx;
 }
 .header-section.data-v-83a5a03c {
-  margin-bottom: 40rpx;
+  margin-bottom: 20rpx;
 }
 .user-card.data-v-83a5a03c {
   background: rgba(255, 255, 255, 0.95);
@@ -223,5 +223,5 @@
   background: #FFFFFF;
 }
 .bottom-space.data-v-83a5a03c {
-  height: 130rpx;
+  height: 80rpx;
 }

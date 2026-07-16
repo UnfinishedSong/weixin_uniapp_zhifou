@@ -44,9 +44,6 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
         }
       });
     };
-    const goGroupBuy = () => {
-      common_vendor.index.showToast({ title: "团购功能开发中", icon: "none" });
-    };
     const goOrders = () => {
       common_vendor.index.navigateTo({ url: "/pages/orders/list" });
     };
@@ -79,11 +76,10 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
         e: common_vendor.o(goPickup),
         f: common_vendor.o(goDelivery),
         g: common_vendor.o(goCustom),
-        h: common_vendor.o(goGroupBuy),
-        i: common_vendor.o(goOrders),
-        j: common_vendor.o(goCoupon),
-        k: common_vendor.o(goPromo),
-        l: common_vendor.f(bgImages.value, (_, index, i0) => {
+        h: common_vendor.o(goOrders),
+        i: common_vendor.o(goCoupon),
+        j: common_vendor.o(goPromo),
+        k: common_vendor.f(bgImages.value, (_, index, i0) => {
           return {
             a: index,
             b: currentBgIndex.value === index ? 1 : ""

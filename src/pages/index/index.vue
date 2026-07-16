@@ -50,10 +50,6 @@
       </view>
 
       <view class="secondary-actions">
-        <view class="secondary-item" @click="goGroupBuy">
-          <view class="secondary-icon">💐</view>
-          <text class="secondary-name">团购鲜花</text>
-        </view>
         <view class="secondary-item" @click="goOrders">
           <view class="secondary-icon">📦</view>
           <text class="secondary-name">我的订单</text>
@@ -141,10 +137,6 @@ const goCustom = () => {
   })
 }
 
-const goGroupBuy = () => {
-  uni.showToast({ title: '团购功能开发中', icon: 'none' })
-}
-
 const goOrders = () => {
   uni.navigateTo({ url: '/pages/orders/list' })
 }
@@ -216,11 +208,11 @@ onUnmounted(() => {
 .content-wrapper {
   position: relative;
   z-index: 1;
-  padding: 60rpx 30rpx 30rpx;
+  padding: 180rpx 30rpx 30rpx;
 }
 
 .header-section {
-  margin-bottom: 40rpx;
+  margin-bottom: 20rpx;
 }
 
 .user-card {
@@ -434,6 +426,6 @@ onUnmounted(() => {
 }
 
 .bottom-space {
-  height: 130rpx;
+  height: 80rpx;
 }
 </style>
