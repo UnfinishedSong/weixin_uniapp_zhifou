@@ -79,7 +79,7 @@
 .product-area.data-v-88bf5328 {
   flex: 1;
   padding: 16rpx;
-  height: calc(100vh - 360rpx);
+  overflow-y: auto;
 }
 .product-list.data-v-88bf5328 {
   display: flex;
@@ -92,10 +92,11 @@
   padding: 16rpx;
   display: flex;
   gap: 12rpx;
+  position: relative;
 }
 .product-image.data-v-88bf5328 {
-  width: 100rpx;
-  height: 100rpx;
+  width: 120rpx;
+  height: 120rpx;
   border-radius: 12rpx;
   flex-shrink: 0;
 }
@@ -104,14 +105,18 @@
   display: flex;
   flex-direction: column;
   min-width: 0;
+  padding-right: 80rpx;
 }
-.qty-control.data-v-88bf5328 {
+.qty-wrap.data-v-88bf5328 {
+  position: absolute;
+  right: 16rpx;
+  top: 50%;
+  transform: translateY(-50%);
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 4rpx;
-  flex-shrink: 0;
+  gap: 6rpx;
 }
 .product-name.data-v-88bf5328 {
   font-size: 26rpx;
@@ -186,11 +191,14 @@
   line-height: 1;
 }
 .qty-btn.plus.data-v-88bf5328 {
+  background: #FF6B9D;
   background: linear-gradient(135deg, #FF6B9D 0%, #FFB6C8 100%);
   border-radius: 50%;
+  border: 2rpx solid #FF6B9D;
 }
 .qty-btn.plus text.data-v-88bf5328 {
   color: #FFFFFF;
+  font-weight: bold;
 }
 .qty-btn.minus.data-v-88bf5328 {
   border-radius: 50%;

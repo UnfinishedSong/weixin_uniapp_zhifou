@@ -185,13 +185,16 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
               };
             }),
             e: common_vendor.t(product.price),
-            f: getQty(product.id) > 0
+            f: common_vendor.o(($event) => increaseQty(product), product.id),
+            g: getQty(product.id) > 0
           }, getQty(product.id) > 0 ? {
-            g: common_vendor.o(($event) => decreaseQty(product), product.id)
+            h: common_vendor.t(getQty(product.id))
           } : {}, {
-            h: common_vendor.t(getQty(product.id)),
-            i: common_vendor.o(($event) => increaseQty(product), product.id),
-            j: product.id
+            i: getQty(product.id) > 0
+          }, getQty(product.id) > 0 ? {
+            j: common_vendor.o(($event) => decreaseQty(product), product.id)
+          } : {}, {
+            k: product.id
           });
         })
       } : {}, {

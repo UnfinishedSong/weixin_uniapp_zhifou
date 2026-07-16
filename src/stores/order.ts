@@ -231,6 +231,12 @@ export const useOrderStore = defineStore('order', () => {
     }
   }
 
+  const setDefaultAddress = (addressId: number) => {
+    addresses.value.forEach(a => {
+      a.isDefault = a.id === addressId
+    })
+  }
+
   const getDefaultAddress = () => {
     return addresses.value.find(a => a.isDefault) || addresses.value[0]
   }
@@ -250,6 +256,7 @@ export const useOrderStore = defineStore('order', () => {
     addAddress,
     deleteAddress,
     updateAddress,
+    setDefaultAddress,
     getDefaultAddress,
     getUnusedCoupons
   }

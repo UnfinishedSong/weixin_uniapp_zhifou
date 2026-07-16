@@ -73,20 +73,20 @@
               </view>
               <text class="product-price">{{ product.price }}</text>
             </view>
-            <view class="qty-control">
+            <view class="qty-wrap">
+              <view 
+                class="qty-btn plus" 
+                @click.stop="increaseQty(product)"
+              >
+                <text>+</text>
+              </view>
+              <text v-if="getQty(product.id) > 0" class="qty-num">{{ getQty(product.id) }}</text>
               <view 
                 class="qty-btn minus" 
                 v-if="getQty(product.id) > 0"
                 @click.stop="decreaseQty(product)"
               >
                 <text>-</text>
-              </view>
-              <text class="qty-num">{{ getQty(product.id) }}</text>
-              <view 
-                class="qty-btn plus" 
-                @click.stop="increaseQty(product)"
-              >
-                <text>+</text>
               </view>
             </view>
           </view>
@@ -450,7 +450,7 @@ const goCheckout = () => {
 .product-area {
   flex: 1;
   padding: 16rpx;
-  height: calc(100vh - 360rpx);
+  overflow-y: auto;
 }
 
 .product-list {
@@ -465,11 +465,12 @@ const goCheckout = () => {
   padding: 16rpx;
   display: flex;
   gap: 12rpx;
+  position: relative;
 }
 
 .product-image {
-  width: 100rpx;
-  height: 100rpx;
+  width: 120rpx;
+  height: 120rpx;
   border-radius: 12rpx;
   flex-shrink: 0;
 }
@@ -479,15 +480,19 @@ const goCheckout = () => {
   display: flex;
   flex-direction: column;
   min-width: 0;
+  padding-right: 80rpx;
 }
 
-.qty-control {
+.qty-wrap {
+  position: absolute;
+  right: 16rpx;
+  top: 50%;
+  transform: translateY(-50%);
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 4rpx;
-  flex-shrink: 0;
+  gap: 6rpx;
 }
 
 .product-name {
@@ -574,11 +579,14 @@ const goCheckout = () => {
   }
   
   &.plus {
+    background: #FF6B9D;
     background: linear-gradient(135deg, #FF6B9D 0%, #FFB6C8 100%);
     border-radius: 50%;
+    border: 2rpx solid #FF6B9D;
     
     text {
       color: #FFFFFF;
+      font-weight: bold;
     }
   }
   
