@@ -25,6 +25,7 @@
           <text class="category-icon">{{ category.icon }}</text>
           <text class="category-name">{{ category.name }}</text>
         </view>
+        <view class="bottom-spacer"></view>
       </scroll-view>
 
       <scroll-view class="product-area" scroll-y>
@@ -95,6 +96,7 @@
           <text class="empty-icon">🌸</text>
           <text class="empty-text">暂无商品</text>
         </view>
+        <view class="bottom-spacer"></view>
       </scroll-view>
     </view>
 
@@ -356,17 +358,18 @@ const goCheckout = () => {
 
 <style lang="scss" scoped>
 .page {
-  min-height: 100vh;
+  height: 100vh;
   background: #F5F5F5;
-  display: flex;
-  flex-direction: column;
+  position: relative;
 }
 
 .search-bar {
   background: #FFFFFF;
   padding: 16rpx 20rpx;
-  position: sticky;
+  position: absolute;
   top: 0;
+  left: 0;
+  right: 0;
   z-index: 100;
 }
 
@@ -396,15 +399,18 @@ const goCheckout = () => {
 }
 
 .content {
-  flex: 1;
+  position: absolute;
+  top: 88rpx;
+  left: 0;
+  right: 0;
+  bottom: calc(350rpx + env(safe-area-inset-bottom));
   display: flex;
-  overflow: hidden;
 }
 
 .category-sidebar {
   width: 180rpx;
   background: #F8F8F8;
-  height: calc(100vh - 360rpx);
+  overflow-y: auto;
 }
 
 .category-item {
@@ -457,6 +463,10 @@ const goCheckout = () => {
   display: flex;
   flex-direction: column;
   gap: 16rpx;
+}
+
+.bottom-spacer {
+  height: calc(500rpx + env(safe-area-inset-bottom));
 }
 
 .product-item {
@@ -718,16 +728,16 @@ const goCheckout = () => {
 
 .bottom-bar {
   position: fixed;
-  bottom: 110rpx;
+  bottom: calc(110rpx + env(safe-area-inset-bottom));
   left: 0;
   right: 0;
   background: #FFFFFF;
-  padding: 16rpx 20rpx;
-  padding-bottom: calc(16rpx + env(safe-area-inset-bottom));
+  padding: 20rpx 24rpx;
   display: flex;
   align-items: center;
   justify-content: space-between;
   box-shadow: 0 -2rpx 10rpx rgba(0, 0, 0, 0.05);
+  z-index: 100;
 }
 
 .cart-info {
