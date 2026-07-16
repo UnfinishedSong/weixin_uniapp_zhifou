@@ -195,7 +195,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import CustomTabBar from '@/components/CustomTabBar.vue'
 import { categories, products, getHotProducts, type Product } from '@/data/products'
 import { useCartStore } from '@/stores/cart'
@@ -208,6 +208,7 @@ const selectedCategory = ref(0)
 const showCartPopup = ref(false)
 const selectedIds = ref<number[]>([])
 const hotProducts = ref<Product[]>(getHotProducts())
+const deliveryType = ref<'delivery' | 'pickup'>('delivery')
 
 const allCategories = computed(() => [
   { id: 0, name: '全部', icon: '🌸' },
@@ -337,13 +338,24 @@ const removeItem = (id: number) => {
   })
 }
 
+onMounted(() => {
+  const pages = getCurrentPages()
+  const currentPage = pages[pages.length - 1] as { options?: { deliveryType?: string } }
+  const dt = currentPage.options?.deliveryType
+  if (dt === 'pickup') {
+    deliveryType.value = 'pickup'
+  } else if (dt === 'delivery') {
+    deliveryType.value = 'delivery'
+  }
+})
+
 const goCheckout = () => {
   if (selectedIds.value.length === 0) {
     uni.showToast({ title: '请选择商品', icon: 'none' })
     return
   }
   showCartPopup.value = false
-  uni.navigateTo({ url: '/pages/checkout/checkout' })
+  uni.navigateTo({ url: `/pages/checkout/checkout?deliveryType=${deliveryType.value}` })
 }
 </script>
 

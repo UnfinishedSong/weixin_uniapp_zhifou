@@ -6,33 +6,11 @@
           <text class="address-name">{{ selectedAddress.name }}</text>
           <text class="address-phone">{{ selectedAddress.phone }}</text>
         </view>
-        <text class="address-detail">{{ selectedAddress.province }}{{ selectedAddress.city }}{{ selectedAddress.district }}{{ selectedAddress.detail }}</text>
+        <text class="address-detail">{{ selectedAddress.province }} {{ selectedAddress.city }} {{ selectedAddress.district }} {{ selectedAddress.detail }}</text>
       </view>
       <view v-else class="address-empty">
         <text class="empty-icon">📍</text>
         <text class="empty-text">请选择收货地址</text>
-      </view>
-      <text class="address-arrow">→</text>
-    </view>
-
-    <view class="items-section">
-      <view class="section-title">商品清单</view>
-      <view class="items-list">
-        <view 
-          v-for="item in cartStore.items" 
-          :key="item.id"
-          class="item-row"
-        >
-          <image class="item-image" :src="item.product.images[0]" mode="aspectFill" />
-          <view class="item-info">
-            <text class="item-name">{{ item.product.name }}</text>
-            <text v-if="item.spec" class="item-spec">{{ item.spec }}</text>
-            <view class="item-footer">
-              <text class="item-price">{{ item.product.price }}</text>
-              <text class="item-qty">×{{ item.quantity }}</text>
-            </view>
-          </view>
-        </view>
       </view>
     </view>
 
@@ -90,7 +68,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { useCartStore } from '@/stores/cart'
 import { useOrderStore } from '@/stores/order'
 import { useUserStore } from '@/stores/user'
@@ -103,6 +81,7 @@ const userStore = useUserStore()
 const selectedAddress = ref<Address | null>(orderStore.getDefaultAddress() || null)
 const selectedCoupon = ref(orderStore.coupons.find(c => !c.used && cartStore.totalPrice >= c.minAmount) || null)
 const remark = ref('')
+const deliveryType = ref<'delivery' | 'pickup'>('delivery')
 
 const availableCoupons = computed(() => {
   return orderStore.coupons.filter(c => !c.used && cartStore.totalPrice >= c.minAmount)
@@ -130,6 +109,17 @@ const goCoupon = () => {
   uni.navigateTo({ url: '/pages/coupon/coupon' })
 }
 
+onMounted(() => {
+  const pages = getCurrentPages()
+  const currentPage = pages[pages.length - 1] as { options?: { deliveryType?: string } }
+  const dt = currentPage.options?.deliveryType
+  if (dt === 'pickup') {
+    deliveryType.value = 'pickup'
+  } else if (dt === 'delivery') {
+    deliveryType.value = 'delivery'
+  }
+})
+
 const submitOrder = () => {
   if (!selectedAddress.value) {
     uni.showToast({ title: '请选择收货地址', icon: 'none' })
@@ -144,6 +134,7 @@ const submitOrder = () => {
   const order = orderStore.createOrder(
     cartStore.items,
     selectedAddress.value.id,
+    deliveryType.value,
     remark.value,
     selectedCoupon.value?.id
   )
@@ -174,8 +165,6 @@ const submitOrder = () => {
   margin: 20rpx;
   border-radius: 20rpx;
   padding: 24rpx;
-  display: flex;
-  align-items: center;
 }
 
 .address-info {
@@ -207,96 +196,19 @@ const submitOrder = () => {
 }
 
 .address-empty {
-  flex: 1;
   display: flex;
-  flex-direction: column;
   align-items: center;
+  justify-content: center;
+  gap: 12rpx;
+  padding: 40rpx 0;
 }
 
 .empty-icon {
-  font-size: 48rpx;
+  font-size: 36rpx;
 }
 
 .empty-text {
   font-size: 28rpx;
-  color: #999999;
-  margin-top: 8rpx;
-}
-
-.address-arrow {
-  font-size: 32rpx;
-  color: #CCCCCC;
-}
-
-.items-section {
-  background: #FFFFFF;
-  margin: 20rpx;
-  border-radius: 20rpx;
-  padding: 24rpx;
-}
-
-.section-title {
-  font-size: 30rpx;
-  font-weight: 500;
-  color: #333333;
-  margin-bottom: 20rpx;
-}
-
-.items-list {
-  display: flex;
-  flex-direction: column;
-  gap: 20rpx;
-}
-
-.item-row {
-  display: flex;
-  gap: 16rpx;
-}
-
-.item-image {
-  width: 140rpx;
-  height: 140rpx;
-  border-radius: 12rpx;
-}
-
-.item-info {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-}
-
-.item-name {
-  font-size: 28rpx;
-  font-weight: 500;
-  color: #333333;
-}
-
-.item-spec {
-  font-size: 24rpx;
-  color: #999999;
-  margin-top: 8rpx;
-}
-
-.item-footer {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-top: auto;
-}
-
-.item-price {
-  font-size: 28rpx;
-  font-weight: 600;
-  color: #FF6B9D;
-  
-  &::before {
-    content: '¥';
-    font-size: 22rpx;
-  }
-}
-
-.item-qty {
-  font-size: 26rpx;
   color: #999999;
 }
 

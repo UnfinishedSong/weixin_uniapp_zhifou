@@ -1,0 +1,194 @@
+.page.data-v-fb6ea9e5 {
+  min-height: 100vh;
+  background: #F5F5F5;
+  padding-bottom: 130rpx;
+}
+.empty-cart.data-v-fb6ea9e5 {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 150rpx 0;
+}
+.empty-icon.data-v-fb6ea9e5 {
+  font-size: 120rpx;
+}
+.empty-text.data-v-fb6ea9e5 {
+  font-size: 32rpx;
+  color: #999999;
+  margin-top: 30rpx;
+}
+.empty-btn.data-v-fb6ea9e5 {
+  background: linear-gradient(135deg, #FF6B9D 0%, #FFB6C8 100%);
+  border-radius: 40rpx;
+  padding: 24rpx 64rpx;
+  margin-top: 40rpx;
+}
+.empty-btn text.data-v-fb6ea9e5 {
+  font-size: 30rpx;
+  color: #FFFFFF;
+  font-weight: 500;
+}
+.cart-content.data-v-fb6ea9e5 {
+  padding: 20rpx;
+}
+.cart-list.data-v-fb6ea9e5 {
+  background: #FFFFFF;
+  border-radius: 16rpx;
+  overflow: hidden;
+}
+.cart-item.data-v-fb6ea9e5 {
+  display: flex;
+  align-items: center;
+  padding: 20rpx;
+  border-bottom: 1rpx solid #F5F5F5;
+}
+.cart-item.data-v-fb6ea9e5:last-child {
+  border-bottom: none;
+}
+.checkbox.data-v-fb6ea9e5 {
+  width: 48rpx;
+  height: 48rpx;
+  border: 2rpx solid #DDDDDD;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 20rpx;
+}
+.checkbox text.data-v-fb6ea9e5 {
+  font-size: 28rpx;
+  color: #FFFFFF;
+}
+.checkbox.checked.data-v-fb6ea9e5 {
+  background: linear-gradient(135deg, #FF6B9D 0%, #FFB6C8 100%);
+  border-color: transparent;
+}
+.item-image.data-v-fb6ea9e5 {
+  width: 160rpx;
+  height: 160rpx;
+  border-radius: 12rpx;
+  overflow: hidden;
+  margin-right: 20rpx;
+}
+.item-image image.data-v-fb6ea9e5 {
+  width: 100%;
+  height: 100%;
+}
+.item-info.data-v-fb6ea9e5 {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+.item-name.data-v-fb6ea9e5 {
+  font-size: 28rpx;
+  font-weight: 500;
+  color: #333333;
+}
+.item-spec.data-v-fb6ea9e5 {
+  font-size: 24rpx;
+  color: #999999;
+  margin-top: 8rpx;
+}
+.item-footer.data-v-fb6ea9e5 {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 16rpx;
+}
+.item-price.data-v-fb6ea9e5 {
+  font-size: 32rpx;
+  font-weight: 600;
+  color: #FF6B9D;
+}
+.item-price.data-v-fb6ea9e5::before {
+  content: "¥";
+  font-size: 24rpx;
+}
+.quantity-control.data-v-fb6ea9e5 {
+  display: flex;
+  align-items: center;
+  background: #F5F5F5;
+  border-radius: 30rpx;
+}
+.qty-btn.data-v-fb6ea9e5 {
+  width: 56rpx;
+  height: 48rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.qty-btn text.data-v-fb6ea9e5 {
+  font-size: 32rpx;
+  color: #666666;
+  line-height: 1;
+}
+.qty-btn.plus.data-v-fb6ea9e5 {
+  background: linear-gradient(135deg, #FF6B9D 0%, #FFB6C8 100%);
+  border-radius: 30rpx;
+}
+.qty-btn.plus text.data-v-fb6ea9e5 {
+  color: #FFFFFF;
+}
+.qty-num.data-v-fb6ea9e5 {
+  width: 60rpx;
+  text-align: center;
+  font-size: 28rpx;
+  color: #333333;
+}
+.delete-btn.data-v-fb6ea9e5 {
+  padding: 12rpx 20rpx;
+}
+.delete-btn text.data-v-fb6ea9e5 {
+  font-size: 26rpx;
+  color: #999999;
+}
+.bottom-bar.data-v-fb6ea9e5 {
+  position: fixed;
+  bottom: 110rpx;
+  left: 0;
+  right: 0;
+  background: #FFFFFF;
+  padding: 20rpx;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: 0 -2rpx 10rpx rgba(0, 0, 0, 0.05);
+}
+.select-all.data-v-fb6ea9e5 {
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+}
+.select-all text.data-v-fb6ea9e5 {
+  font-size: 28rpx;
+  color: #333333;
+}
+.total-info.data-v-fb6ea9e5 {
+  display: flex;
+  align-items: baseline;
+  gap: 8rpx;
+}
+.total-label.data-v-fb6ea9e5 {
+  font-size: 28rpx;
+  color: #666666;
+}
+.total-price.data-v-fb6ea9e5 {
+  font-size: 36rpx;
+  font-weight: 600;
+  color: #FF6B9D;
+}
+.total-price.data-v-fb6ea9e5::before {
+  content: "¥";
+  font-size: 28rpx;
+}
+.checkout-btn.data-v-fb6ea9e5 {
+  background: linear-gradient(135deg, #FF6B9D 0%, #FFB6C8 100%);
+  border-radius: 40rpx;
+  padding: 24rpx 48rpx;
+}
+.checkout-btn text.data-v-fb6ea9e5 {
+  font-size: 30rpx;
+  color: #FFFFFF;
+  font-weight: 500;
+}

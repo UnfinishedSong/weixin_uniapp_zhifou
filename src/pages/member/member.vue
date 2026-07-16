@@ -24,45 +24,23 @@
         </view>
         <view class="divider"></view>
         <view class="balance-item">
-          <text class="balance-label">累计充值</text>
-          <text class="balance-value">{{ userStore.memberInfo.totalRecharge }}</text>
+          <text class="balance-label">累计消费</text>
+          <text class="balance-value">{{ userStore.memberInfo.totalSpent }}</text>
         </view>
       </view>
 
       <view class="progress-section">
         <view class="progress-header">
-          <text class="progress-title">会员升级进度</text>
-          <text class="progress-target">下一等级: {{ nextLevelName }}</text>
+          <text class="progress-title">会员成长进度</text>
+          <text class="progress-target">{{ nextLevelName }}</text>
         </view>
         <view class="progress-bar">
           <view class="progress-fill" :style="{ width: userStore.memberInfo.progress + '%' }"></view>
         </view>
         <view class="progress-info">
           <text>{{ userStore.memberInfo.levelName }}</text>
-          <text>{{ nextLevelName }}</text>
+          <text>已消费 ¥{{ userStore.memberInfo.totalSpent }}</text>
         </view>
-      </view>
-    </view>
-
-    <view class="recharge-section">
-      <view class="section-title">
-        <text class="title-icon">💰</text>
-        <text class="title-text">充值中心</text>
-      </view>
-      <view class="recharge-options">
-        <view 
-          v-for="option in rechargeAmounts" 
-          :key="option.amount"
-          class="recharge-option"
-          :class="{ active: selectedAmount === option.amount }"
-          @click="selectAmount(option.amount)"
-        >
-          <text class="amount-text">{{ option.amount }}</text>
-          <text v-if="option.bonus > 0" class="bonus-text">送{{ option.bonus }}元</text>
-        </view>
-      </view>
-      <view class="recharge-btn" @click="handleRecharge">
-        <text>立即充值</text>
       </view>
     </view>
 
@@ -100,7 +78,7 @@
             <text v-if="level.level === userStore.memberInfo.level" class="current-tag">当前</text>
           </view>
           <view class="level-detail">
-            <text class="level-amount">充值满{{ level.minAmount }}元</text>
+            <text class="level-amount">消费满{{ level.minAmount }}元</text>
             <text class="level-discount">享{{ (level.discount * 10).toFixed(1) }}折优惠</text>
           </view>
         </view>
@@ -112,15 +90,14 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { computed } from 'vue'
 import CustomTabBar from '@/components/CustomTabBar.vue'
 import { useUserStore } from '@/stores/user'
-import { memberLevels, rechargeAmounts } from '@/data/member'
+import { memberLevels } from '@/data/member'
 
 const userStore = useUserStore()
-const selectedAmount = ref(100)
 
-const levelColors = ['#999999', '#C0C0C0', '#FFD700', '#FF6B9D']
+const levelColors = ['#FF6B9D', '#FFB6C8', '#FFB347', '#52C41A']
 
 const headerGradient = computed(() => {
   const color = levelColors[Math.min(userStore.memberInfo.level - 1, 3)] || '#FF6B9D'
@@ -138,24 +115,8 @@ function adjustColor(hex: string, amount: number): string {
 const nextLevelName = computed(() => {
   const currentLevel = userStore.memberInfo.level
   const nextLevel = memberLevels.find(l => l.level === currentLevel + 1)
-  return nextLevel ? nextLevel.name : '已达最高等级'
+  return nextLevel ? `下一等级: ${nextLevel.name}` : '已达最高等级'
 })
-
-const selectAmount = (amount: number) => {
-  selectedAmount.value = amount
-}
-
-const handleRecharge = () => {
-  uni.showModal({
-    title: '确认充值',
-    content: `确定要充值${selectedAmount.value}元吗？`,
-    success: (res) => {
-      if (res.confirm) {
-        userStore.recharge(selectedAmount.value)
-      }
-    }
-  })
-}
 </script>
 
 <style lang="scss" scoped>
@@ -285,7 +246,7 @@ const handleRecharge = () => {
 
 .progress-target {
   font-size: 24rpx;
-  color: #999999;
+  color: #FF6B9D;
 }
 
 .progress-bar {
@@ -313,7 +274,7 @@ const handleRecharge = () => {
   }
 }
 
-.recharge-section {
+.benefits-section {
   background: #FFFFFF;
   margin: 20rpx;
   border-radius: 20rpx;
@@ -337,66 +298,6 @@ const handleRecharge = () => {
   color: #333333;
 }
 
-.recharge-options {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 20rpx;
-}
-
-.recharge-option {
-  width: calc(33.33% - 14rpx);
-  border: 2rpx solid #EEEEEE;
-  border-radius: 16rpx;
-  padding: 24rpx;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  transition: all 0.3s ease;
-  
-  &.active {
-    border-color: #FF6B9D;
-    background: rgba(255, 107, 157, 0.05);
-  }
-}
-
-.amount-text {
-  font-size: 36rpx;
-  font-weight: 600;
-  color: #333333;
-  
-  &::before {
-    content: '¥';
-    font-size: 28rpx;
-  }
-}
-
-.bonus-text {
-  font-size: 22rpx;
-  color: #FF6B9D;
-  margin-top: 8rpx;
-}
-
-.recharge-btn {
-  background: linear-gradient(135deg, #FF6B9D 0%, #FFB6C8 100%);
-  border-radius: 40rpx;
-  padding: 28rpx;
-  margin-top: 30rpx;
-  text-align: center;
-  
-  text {
-    font-size: 32rpx;
-    font-weight: 500;
-    color: #FFFFFF;
-  }
-}
-
-.benefits-section {
-  background: #FFFFFF;
-  margin: 20rpx;
-  border-radius: 20rpx;
-  padding: 24rpx;
-}
-
 .benefits-list {
   display: flex;
   flex-wrap: wrap;
@@ -407,14 +308,14 @@ const handleRecharge = () => {
   display: flex;
   align-items: center;
   gap: 8rpx;
-  background: #F5F5F5;
+  background: #FFF0F3;
   padding: 16rpx 24rpx;
   border-radius: 20rpx;
 }
 
 .benefit-icon {
   font-size: 24rpx;
-  color: #52C41A;
+  color: #FF6B9D;
 }
 
 .benefit-text {

@@ -9,29 +9,22 @@
     >
       <view class="tab-icon-wrap">
         <text v-if="index === 0" class="icon-text">{{ currentIndex === 0 ? '🏠' : '🏠' }}</text>
-        <text v-else-if="index === 1" class="icon-text">{{ currentIndex === 1 ? '🛒' : '🛒' }}</text>
-        <text v-else class="icon-text">{{ currentIndex === 2 ? '👤' : '👤' }}</text>
+        <text v-else class="icon-text">{{ currentIndex === 1 ? '👤' : '👤' }}</text>
       </view>
       <text class="tab-text">{{ item.text }}</text>
-      <view v-if="index === 1 && localCartCount > 0" class="badge">{{ localCartCount > 99 ? '99+' : localCartCount }}</view>
     </view>
   </view>
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted, watch } from 'vue'
-import { useCartStore } from '@/stores/cart'
+import { ref, onMounted, onUnmounted } from 'vue'
 
 const tabList = [
   { pagePath: '/pages/index/index', text: '首页' },
-  { pagePath: '/pages/order/order', text: '点单' },
   { pagePath: '/pages/mine/mine', text: '我的' }
 ]
 
-const cartStore = useCartStore()
 const currentIndex = ref(0)
-const localCartCount = ref(0)
-let updateTimer: ReturnType<typeof setTimeout> | null = null
 
 const updateCurrentIndex = () => {
   const pages = getCurrentPages()
@@ -41,14 +34,6 @@ const updateCurrentIndex = () => {
   if (index >= 0 && index !== currentIndex.value) {
     currentIndex.value = index
   }
-}
-
-const updateCartCount = () => {
-  if (updateTimer) return
-  updateTimer = setTimeout(() => {
-    localCartCount.value = cartStore.totalCount
-    updateTimer = null
-  }, 50)
 }
 
 const handleClick = (index: number) => {
@@ -62,20 +47,11 @@ const handleClick = (index: number) => {
   })
 }
 
-watch(() => cartStore.totalCount, () => {
-  updateCartCount()
-})
-
 onMounted(() => {
   updateCurrentIndex()
-  localCartCount.value = cartStore.totalCount
 })
 
-onUnmounted(() => {
-  if (updateTimer) {
-    clearTimeout(updateTimer)
-  }
-})
+onUnmounted(() => {})
 </script>
 
 <style lang="scss" scoped>
@@ -142,23 +118,5 @@ onUnmounted(() => {
   font-size: 24rpx;
   color: #999999;
   transition: color 0.2s ease;
-}
-
-.badge {
-  position: absolute;
-  top: -4rpx;
-  right: calc(50% - 40rpx);
-  min-width: 36rpx;
-  height: 36rpx;
-  background: linear-gradient(135deg, #FF4D6D 0%, #FF758F 100%);
-  color: #FFFFFF;
-  font-size: 20rpx;
-  font-weight: 600;
-  border-radius: 18rpx;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0 10rpx;
-  box-shadow: 0 4rpx 12rpx rgba(255, 77, 109, 0.4);
 }
 </style>

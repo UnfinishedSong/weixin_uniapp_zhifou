@@ -1,0 +1,103 @@
+.page.data-v-b9746c2a {
+  min-height: 100vh;
+  background: #F5F5F5;
+  padding-bottom: 180rpx;
+}
+.address-list.data-v-b9746c2a {
+  padding: 20rpx;
+}
+.address-item.data-v-b9746c2a {
+  background: #FFFFFF;
+  border-radius: 20rpx;
+  padding: 24rpx;
+  margin-bottom: 20rpx;
+  display: flex;
+  align-items: flex-start;
+  gap: 16rpx;
+}
+.radio.data-v-b9746c2a {
+  width: 48rpx;
+  height: 48rpx;
+  border: 2rpx solid #DDDDDD;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.radio text.data-v-b9746c2a {
+  font-size: 28rpx;
+  color: #FFFFFF;
+}
+.radio.checked.data-v-b9746c2a {
+  background: #FF6B9D;
+  border-color: #FF6B9D;
+}
+.address-info.data-v-b9746c2a {
+  flex: 1;
+}
+.address-header.data-v-b9746c2a {
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+}
+.address-name.data-v-b9746c2a {
+  font-size: 30rpx;
+  font-weight: 500;
+  color: #333333;
+}
+.address-phone.data-v-b9746c2a {
+  font-size: 28rpx;
+  color: #666666;
+}
+.default-tag.data-v-b9746c2a {
+  font-size: 22rpx;
+  color: #FF6B9D;
+  background: rgba(255, 107, 157, 0.1);
+  padding: 4rpx 12rpx;
+  border-radius: 8rpx;
+}
+.address-detail.data-v-b9746c2a {
+  font-size: 26rpx;
+  color: #999999;
+  margin-top: 12rpx;
+  display: block;
+}
+.address-actions.data-v-b9746c2a {
+  display: flex;
+  flex-direction: column;
+  gap: 12rpx;
+}
+.action-btn.data-v-b9746c2a {
+  font-size: 26rpx;
+  color: #999999;
+}
+.empty-state.data-v-b9746c2a {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 100rpx 0;
+}
+.empty-icon.data-v-b9746c2a {
+  font-size: 80rpx;
+}
+.empty-text.data-v-b9746c2a {
+  font-size: 28rpx;
+  color: #999999;
+  margin-top: 20rpx;
+}
+.add-btn.data-v-b9746c2a {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: linear-gradient(135deg, #FF6B9D 0%, #FFB6C8 100%);
+  padding: 30rpx;
+  padding-bottom: calc(30rpx + env(safe-area-inset-bottom));
+  text-align: center;
+}
+.add-btn text.data-v-b9746c2a {
+  font-size: 32rpx;
+  font-weight: 500;
+  color: #FFFFFF;
+}

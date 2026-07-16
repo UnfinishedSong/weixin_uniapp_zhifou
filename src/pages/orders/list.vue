@@ -21,9 +21,6 @@
         <view class="order-header">
           <text class="order-no">{{ order.orderNo }}</text>
           <text class="order-status" :class="order.status">{{ statusText[order.status] }}</text>
-        </view>
-        <view class="order-items">
-          <view 
             v-for="item in order.items" 
             :key="item.id"
             class="order-product"
@@ -48,7 +45,6 @@
             <view v-if="order.status === 'completed'" class="action-btn outline">再次购买</view>
           </view>
         </view>
-      </view>
     </view>
 
     <view v-else class="empty-state">
@@ -65,7 +61,6 @@ import { useOrderStore } from '@/stores/order'
 const orderStore = useOrderStore()
 
 const tabs = [
-  { label: '全部', value: '' },
   { label: '待付款', value: 'pending' },
   { label: '待收货', value: 'shipped' },
   { label: '已完成', value: 'completed' }
@@ -81,17 +76,7 @@ const statusText: Record<string, string> = {
 
 const activeTab = ref('')
 
-onMounted(() => {
-  const pages = getCurrentPages()
-  const currentPage = pages[pages.length - 1] as { options?: { status?: string } }
-  const status = currentPage.options?.status
-  if (status) {
-    activeTab.value = status
-  }
-})
-
 const filteredOrders = computed(() => {
-  if (!activeTab.value) return orderStore.orders
   return orderStore.orders.filter(o => o.status === activeTab.value)
 })
 
@@ -195,7 +180,7 @@ const confirmOrder = (orderId: number) => {
   font-size: 26rpx;
   font-weight: 500;
   
-  &.pending { color: #FF6B9D; }
+  margin-bottom: 20rpx;
   &.paid { color: #3498DB; }
   &.shipped { color: #F39C12; }
   &.completed { color: #52C41A; }
@@ -211,36 +196,12 @@ const confirmOrder = (orderId: number) => {
 .order-product {
   display: flex;
   gap: 16rpx;
-}
 
-.order-product image {
-  width: 120rpx;
-  height: 120rpx;
-  border-radius: 12rpx;
-}
-
-.product-info {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-}
-
-.product-name {
-  font-size: 28rpx;
-  color: #333333;
-}
-
-.product-spec {
-  font-size: 24rpx;
-  color: #999999;
-  margin-top: 8rpx;
-}
-
-.product-footer {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-top: auto;
+  image {
+    width: 160rpx;
+    height: 160rpx;
+    border-radius: 12rpx;
+  }
 }
 
 .product-price {

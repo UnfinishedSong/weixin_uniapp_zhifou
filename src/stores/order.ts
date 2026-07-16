@@ -31,8 +31,15 @@ export interface Order {
   totalAmount: number
   payAmount: number
   status: 'pending' | 'paid' | 'shipped' | 'completed' | 'cancelled'
-  remark?: string
   createdAt: string
+}
+
+export interface Coupon {
+  id: number
+  name: string
+  value: number
+  minAmount: number
+  used: boolean
 }
 
 export const useOrderStore = defineStore('order', () => {
@@ -105,7 +112,7 @@ export const useOrderStore = defineStore('order', () => {
       createdAt: '2026-07-14 14:20:00'
     }
   ])
-  
+
   const addresses = ref<Address[]>([
     {
       id: 1,
@@ -128,47 +135,20 @@ export const useOrderStore = defineStore('order', () => {
       isDefault: false
     }
   ])
-  
-  const coupons = ref([
-    {
-      id: 1,
-      name: '新人专享券',
-      type: 'discount',
-      value: 20,
-      minAmount: 100,
-      startDate: '2026-01-01',
-      endDate: '2026-12-31',
-      used: false
-    },
-    {
-      id: 2,
-      name: '会员专属券',
-      type: 'discount',
-      value: 50,
-      minAmount: 300,
-      startDate: '2026-01-01',
-      endDate: '2026-12-31',
-      used: false
-    },
-    {
-      id: 3,
-      name: '节日特惠券',
-      type: 'discount',
-      value: 30,
-      minAmount: 150,
-      startDate: '2026-07-01',
-      endDate: '2026-07-31',
-      used: false
-    }
+
+  const coupons = ref<Coupon[]>([
+    { id: 1, name: '新人专享', value: 10, minAmount: 100, used: false },
+    { id: 2, name: '满减优惠', value: 20, minAmount: 200, used: false },
+    { id: 3, name: '生日礼包', value: 30, minAmount: 150, used: true }
   ])
-  
-  const createOrder = (items: CartItem[], addressId: number, remark?: string, couponId?: number) => {
+
+  const createOrder = (items: CartItem[], addressId: number, deliveryType: string, remark?: string, couponId?: number) => {
     const address = addresses.value.find(a => a.id === addressId)
     if (!address) {
       uni.showToast({ title: '请选择收货地址', icon: 'none' })
       return null
     }
-    
+
     const orderItems: OrderItem[] = items.map((item, index) => ({
       id: index + 1,
       productId: item.product.id,
@@ -178,9 +158,9 @@ export const useOrderStore = defineStore('order', () => {
       spec: item.spec,
       image: item.product.images[0]
     }))
-    
+
     const totalAmount = items.reduce((sum, item) => sum + item.product.price * item.quantity, 0)
-    
+
     let payAmount = totalAmount
     if (couponId) {
       const coupon = coupons.value.find(c => c.id === couponId)
@@ -189,7 +169,7 @@ export const useOrderStore = defineStore('order', () => {
         coupon.used = true
       }
     }
-    
+
     const order: Order = {
       id: Date.now(),
       orderNo: `HY${new Date().toISOString().slice(0, 10).replace(/-/g, '')}${String(orders.value.length + 1).padStart(4, '0')}`,
@@ -198,14 +178,13 @@ export const useOrderStore = defineStore('order', () => {
       totalAmount,
       payAmount: Math.max(0, payAmount),
       status: 'pending',
-      remark,
       createdAt: new Date().toLocaleString('zh-CN')
     }
-    
+
     orders.value.unshift(order)
     return order
   }
-  
+
   const payOrder = (orderId: number) => {
     const order = orders.value.find(o => o.id === orderId)
     if (order) {
@@ -213,7 +192,7 @@ export const useOrderStore = defineStore('order', () => {
       uni.showToast({ title: '支付成功', icon: 'success' })
     }
   }
-  
+
   const cancelOrder = (orderId: number) => {
     const order = orders.value.find(o => o.id === orderId)
     if (order && order.status === 'pending') {
@@ -221,7 +200,7 @@ export const useOrderStore = defineStore('order', () => {
       uni.showToast({ title: '已取消订单', icon: 'success' })
     }
   }
-  
+
   const confirmOrder = (orderId: number) => {
     const order = orders.value.find(o => o.id === orderId)
     if (order && order.status === 'shipped') {
@@ -229,13 +208,13 @@ export const useOrderStore = defineStore('order', () => {
       uni.showToast({ title: '已确认收货', icon: 'success' })
     }
   }
-  
+
   const addAddress = (address: Omit<Address, 'id'>) => {
     const newId = Math.max(...addresses.value.map(a => a.id), 0) + 1
     addresses.value.push({ ...address, id: newId })
     uni.showToast({ title: '地址添加成功', icon: 'success' })
   }
-  
+
   const deleteAddress = (addressId: number) => {
     const index = addresses.value.findIndex(a => a.id === addressId)
     if (index !== -1) {
@@ -243,7 +222,7 @@ export const useOrderStore = defineStore('order', () => {
       uni.showToast({ title: '地址已删除', icon: 'success' })
     }
   }
-  
+
   const updateAddress = (addressId: number, address: Omit<Address, 'id'>) => {
     const index = addresses.value.findIndex(a => a.id === addressId)
     if (index !== -1) {
@@ -251,15 +230,15 @@ export const useOrderStore = defineStore('order', () => {
       uni.showToast({ title: '地址已更新', icon: 'success' })
     }
   }
-  
+
   const getDefaultAddress = () => {
     return addresses.value.find(a => a.isDefault) || addresses.value[0]
   }
-  
+
   const getUnusedCoupons = () => {
     return coupons.value.filter(c => !c.used)
   }
-  
+
   return {
     orders,
     addresses,

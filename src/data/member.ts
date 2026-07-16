@@ -13,7 +13,7 @@ export interface MemberInfo {
   levelName: string
   balance: number
   points: number
-  totalRecharge: number
+  totalSpent: number
   progress: number
   benefits: string[]
 }
@@ -21,57 +21,57 @@ export interface MemberInfo {
 export const memberLevels: MemberLevel[] = [
   {
     level: 1,
-    name: '普通会员',
+    name: '含苞待放',
     minAmount: 0,
     discount: 1,
     benefits: ['基础服务']
   },
   {
     level: 2,
-    name: '银卡会员',
-    minAmount: 100,
-    discount: 0.95,
-    benefits: ['生日礼', '专属客服', '9.5折优惠']
+    name: '初露锋芒',
+    minAmount: 300,
+    discount: 0.98,
+    benefits: ['生日礼', '专属客服', '9.8折优惠']
   },
   {
     level: 3,
-    name: '金卡会员',
-    minAmount: 500,
-    discount: 0.9,
-    benefits: ['生日礼', '专属客服', '优先配送', '9折优惠']
+    name: '繁花似锦',
+    minAmount: 800,
+    discount: 0.95,
+    benefits: ['生日礼', '专属客服', '优先配送', '9.5折优惠']
   },
   {
     level: 4,
-    name: '钻石会员',
-    minAmount: 1000,
-    discount: 0.85,
-    benefits: ['生日礼', '专属客服', '优先配送', '专属折扣', '8.5折优惠']
+    name: '绽放芳华',
+    minAmount: 2000,
+    discount: 0.9,
+    benefits: ['生日礼', '专属客服', '优先配送', '专属折扣', '9折优惠']
   }
 ]
 
-export function getMemberLevel(totalRecharge: number): MemberLevel {
+export function getMemberLevel(totalSpent: number): MemberLevel {
   for (let i = memberLevels.length - 1; i >= 0; i--) {
-    if (totalRecharge >= memberLevels[i].minAmount) {
+    if (totalSpent >= memberLevels[i].minAmount) {
       return memberLevels[i]
     }
   }
   return memberLevels[0]
 }
 
-export function calculateProgress(totalRecharge: number): number {
-  const currentLevel = getMemberLevel(totalRecharge)
+export function calculateProgress(totalSpent: number): number {
+  const currentLevel = getMemberLevel(totalSpent)
   const nextLevel = memberLevels.find(l => l.level === currentLevel.level + 1)
   
   if (!nextLevel) return 100
   
   const diff = nextLevel.minAmount - currentLevel.minAmount
-  const currentDiff = totalRecharge - currentLevel.minAmount
+  const currentDiff = totalSpent - currentLevel.minAmount
   
   return Math.min(100, Math.round((currentDiff / diff) * 100))
 }
 
-export function createMemberInfo(userId: number, balance: number, points: number, totalRecharge: number): MemberInfo {
-  const levelInfo = getMemberLevel(totalRecharge)
+export function createMemberInfo(userId: number, balance: number, points: number, totalSpent: number): MemberInfo {
+  const levelInfo = getMemberLevel(totalSpent)
   
   return {
     id: userId,
@@ -80,8 +80,8 @@ export function createMemberInfo(userId: number, balance: number, points: number
     levelName: levelInfo.name,
     balance,
     points,
-    totalRecharge,
-    progress: calculateProgress(totalRecharge),
+    totalSpent,
+    progress: calculateProgress(totalSpent),
     benefits: levelInfo.benefits
   }
 }

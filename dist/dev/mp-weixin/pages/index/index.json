@@ -1,0 +1,7 @@
+{
+  "navigationBarTitleText": "知否花店",
+  "navigationStyle": "custom",
+  "usingComponents": {
+    "custom-tab-bar": "../../components/CustomTabBar"
+  }
+}
